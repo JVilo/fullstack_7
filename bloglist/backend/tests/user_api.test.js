@@ -37,7 +37,7 @@ describe('when there is initially one user at db', () => {
     const usersAtEnd = await helper.usersInDb()
     assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
 
-    const usernames = usersAtEnd.map(u => u.username)
+    const usernames = usersAtEnd.map((u) => u.username)
     assert(usernames.includes(newUser.username))
   })
 
@@ -47,7 +47,7 @@ describe('when there is initially one user at db', () => {
     const newUser = {
       username: 'root',
       name: 'Superuser',
-      password: 'salainen'
+      password: 'salainen',
     }
 
     const result = await api
@@ -96,7 +96,9 @@ describe('when there is initially one user at db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    assert(result.body.error.includes('password must be at least 3 characters long'))
+    assert(
+      result.body.error.includes('password must be at least 3 characters long')
+    )
 
     const usersAtEnd = await helper.usersInDb()
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)

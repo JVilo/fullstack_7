@@ -9,16 +9,20 @@ describe('<Blog />', () => {
     likes: 10,
     user: {
       username: 'mluukkai',
-      name: 'Matti Luukkainen'
-    }
+      name: 'Matti Luukkainen',
+    },
   }
 
   test('renders blog details and likes for unauthenticated user, but no buttons', () => {
     render(<Blog blog={blog} user={null} />)
 
-    expect(screen.getByText('Testing React Components', { exact: false })).toBeDefined()
+    expect(
+      screen.getByText('Testing React Components', { exact: false })
+    ).toBeDefined()
     expect(screen.getByText('Test Author', { exact: false })).toBeDefined()
-    expect(screen.getByText('https://react-testing.com', { exact: false })).toBeDefined()
+    expect(
+      screen.getByText('https://react-testing.com', { exact: false })
+    ).toBeDefined()
     expect(screen.getByText('10 likes', { exact: false })).toBeDefined()
 
     // Haetaan painikkeita roolin mukaan, jolloin "10 likes" -tekstiä ei lasketa mukaan
@@ -32,7 +36,7 @@ describe('<Blog />', () => {
   test('renders only like button for logged in user who is not the creator', () => {
     const otherUser = {
       username: 'otheruser',
-      name: 'Other User'
+      name: 'Other User',
     }
 
     render(<Blog blog={blog} user={otherUser} />)
@@ -47,7 +51,7 @@ describe('<Blog />', () => {
   test('renders both like and remove buttons for creator of the blog', () => {
     const creatorUser = {
       username: 'mluukkai',
-      name: 'Matti Luukkainen'
+      name: 'Matti Luukkainen',
     }
 
     render(<Blog blog={blog} user={creatorUser} />)

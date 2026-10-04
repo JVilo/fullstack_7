@@ -49,8 +49,8 @@ describe('when there is initially some blogs saved', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    const ids = response.body.map(blog => blog.id)
-    assert(ids.every(id => typeof id === 'string'))
+    const ids = response.body.map((blog) => blog.id)
+    assert(ids.every((id) => typeof id === 'string'))
   })
 })
 
@@ -59,7 +59,7 @@ describe('addition of a new blog', () => {
     const newBlog = {
       title: 'Test Blog',
       author: 'Test Author',
-      url: 'http://test.com'
+      url: 'http://test.com',
     }
 
     await api
@@ -111,7 +111,7 @@ describe('addition of a new blog', () => {
     const newBlog = {
       title: 'Blog without token',
       author: 'Unauthorized User',
-      url: 'http://unauthorized.com'
+      url: 'http://unauthorized.com',
     }
 
     await api

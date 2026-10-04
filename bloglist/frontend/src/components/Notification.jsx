@@ -5,7 +5,8 @@ const Notification = ({ notification }) => {
     return null
   }
 
-  const messageText = notification.message || notification.text || notification.name
+  const messageText =
+    notification.message || notification.text || notification.name
 
   if (!messageText) {
     return null

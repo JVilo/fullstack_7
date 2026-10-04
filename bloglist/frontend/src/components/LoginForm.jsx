@@ -5,7 +5,7 @@ const LoginForm = ({
   handleUsernameChange,
   handlePasswordChange,
   username,
-  password
+  password,
 }) => {
   return (
     <div>
@@ -15,7 +15,7 @@ const LoginForm = ({
         <div>
           <label>
             <TextField
-              label='username'
+              label="username"
               value={username}
               autoComplete="username"
               onChange={handleUsernameChange}
@@ -33,7 +33,9 @@ const LoginForm = ({
             />
           </label>
         </div>
-        <Button type="submit" variant="contained" style={{ marginTop: 10 }}>login</Button>
+        <Button type="submit" variant="contained" style={{ marginTop: 10 }}>
+          login
+        </Button>
       </form>
     </div>
   )

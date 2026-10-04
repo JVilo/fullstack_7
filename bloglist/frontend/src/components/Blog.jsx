@@ -16,7 +16,11 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 
       {/* Kirjoittaja */}
       {blog.author && (
-        <Typography variant="h6" color="text.secondary" sx={{ mb: 2, fontWeight: 400 }}>
+        <Typography
+          variant="h6"
+          color="text.secondary"
+          sx={{ mb: 2, fontWeight: 400 }}
+        >
           by {blog.author}
         </Typography>
       )}
@@ -27,7 +31,11 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
           href={blog.url}
           target="_blank"
           rel="noreferrer"
-          style={{ color: '#1976d2', fontSize: '1.1rem', textDecoration: 'underline' }}
+          style={{
+            color: '#1976d2',
+            fontSize: '1.1rem',
+            textDecoration: 'underline',
+          }}
         >
           {blog.url}
         </a>

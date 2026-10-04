@@ -22,6 +22,6 @@ test('Calls createBlog callback with right details when blog is created', async 
   expect(createBlog.mock.calls[0][0]).toEqual({
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
-    url: 'http://www.cs.utexas.edu/~EWD/'
+    url: 'http://www.cs.utexas.edu/~EWD/',
   })
 })
