@@ -15,7 +15,7 @@ const createNew = async (content) => {
   return await response.json()
 }
 
-const deleteAnecdote = async (id) => {
+const remove = async (id) => {
   const options = {
     method: 'DELETE'
   }
@@ -26,5 +26,5 @@ const deleteAnecdote = async (id) => {
 export default {
   getAll,
   createNew,
-  deleteAnecdote
+  remove
 }
