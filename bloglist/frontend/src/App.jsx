@@ -10,6 +10,7 @@ import loginService from './services/login'
 import './style.css'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
+import NotFound from "./components/NotFound.jsx";
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -125,7 +126,7 @@ const App = () => {
       }
       await blogService.remove(id)
       setBlogs(blogs.filter(b => b.id !== id))
-      setNotification({neme:'Deleted ${title}'})
+      setNotification({name:'Deleted ${title}'})
 
       navigate('/')
     } catch {
@@ -185,13 +186,18 @@ const App = () => {
             } />
 
             <Route path="/blogs/:id" element={
-              <Blog
-                blog={blog}
-                handleLike={handleLike}
-                handleDelete={handleDelete}
-                user={user}
-              />
+              blog ? (
+                <Blog
+                  blog={blog}
+                  handleLike={handleLike}
+                  handleDelete={handleDelete}
+                  user={user}
+                />
+              ) : (
+                <NotFound />
+              )
             } />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           </ErrorBoundary>
         </div>
