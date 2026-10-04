@@ -31,7 +31,14 @@ export const useAnecdotes = () => {
     })
   }, [])
 
+  const addAnecdote = (newAnecdote) => {
+    anecdoteService.createNew(newAnecdote).then(returnedAnecdote => {
+      setAnecdotes(anecdotes.concat(returnedAnecdote))
+    })
+  }
+
   return {
-    anecdotes
+    anecdotes,
+    addAnecdote
   }
 }
