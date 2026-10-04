@@ -1,0 +1,38 @@
+.notification {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.showBlog {
+  padding-top: 5px;
+  padding-left: 5px;
+  border-style: solid;
+  border-width: 1px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+.removeButton {
+  background-color: red;
+  color: black;
+  font-size: 15px;
+  font-style: oblique;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+}
