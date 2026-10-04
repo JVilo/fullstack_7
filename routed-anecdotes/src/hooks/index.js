@@ -2,18 +2,21 @@ import { useState } from 'react'
 
 export const useField = (type) => {
   const [value, setValue] = useState('')
-  const reset = () => {
-    setValue('')
-  }
 
   const onChange = (event) => {
     setValue(event.target.value)
   }
 
+  const reset = () => {
+    setValue('')
+  }
+
   return {
-    type,
-    value,
-    onChange,
-    reset
+    reset,
+    inputProps: {
+      type,
+      value,
+      onChange
+    }
   }
 }
