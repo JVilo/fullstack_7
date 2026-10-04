@@ -9,6 +9,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import './style.css'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -165,7 +166,7 @@ const App = () => {
         </AppBar>
         <div>
           <Notification notification={notification} />
-
+          <ErrorBoundary>
           <Routes>
             <Route path="/" element={<BlogList blogs={blogs} />} />
 
@@ -192,6 +193,7 @@ const App = () => {
               />
             } />
           </Routes>
+          </ErrorBoundary>
         </div>
       </Container>
   )
