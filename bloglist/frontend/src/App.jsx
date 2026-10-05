@@ -11,12 +11,13 @@ import './style.css'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import NotFound from './components/NotFound.jsx'
+import { useNotify } from './NotificationContext'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const notify = useNotify()
 
   const [user, setUser] = useState(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -34,11 +35,6 @@ const App = () => {
     blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs))
   }, [])
 
-  const showNotification = (message, type = 'notification') => {
-    setNotification({ message, type })
-    setTimeout(() => setNotification(null), 5000)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -48,22 +44,12 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setNotification({
-        message: `${user.name} logged in successfully`,
-        type: 'success',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      notify(`${user.name} logged in successfully`, 5)
       navigate('/')
     } catch {
       setUsername('')
       setPassword('')
-
-      setNotification({ message: 'wrong username or password', type: 'error' })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      notify('wrong username or password', 5)
     }
   }
 
@@ -71,7 +57,7 @@ const App = () => {
     setUser(null)
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
-    setNotification({ text: 'logged out', type: 'success' })
+    notify('Logged out successfully', 5)
     navigate('/')
   }
 
@@ -85,22 +71,13 @@ const App = () => {
 
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setNotification({
-        message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-        type: 'success',
-      })
+      notify(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 5)
       navigate('/')
     } catch (exception) {
       console.error('Blog creation error:', exception)
-
       const errorMessage =
         exception.response?.data?.error || 'Creating blog failed'
-
-      setNotification({ message: errorMessage, type: 'error' })
-
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      notify(errorMessage, 5)
     }
   }
 
@@ -117,8 +94,9 @@ const App = () => {
     try {
       const returnedBlog = await blogService.update(id, updatedBlog)
       setBlogs(blogs.map((b) => (b.id !== id ? b : returnedBlog)))
+      notify(`you liked '${returnedBlog.title}'`, 5)
     } catch {
-      setNotification({ name: 'Liking failed', type: 'error' })
+      notify('Liking failed', 5)
     }
   }
 
@@ -130,18 +108,16 @@ const App = () => {
       }
       await blogService.remove(id)
       setBlogs(blogs.filter((b) => b.id !== id))
-      setNotification({ name: 'Deleted ${title}' })
-
+      notify(`Deleted '${title}'`, 5)
       navigate('/')
     } catch {
-      setNotification({ name: 'Removing failed', type: 'error' })
+      notify('Removing failed', 5)
     }
   }
 
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((b) => b.id === match.params.id) : null
 
-  const padding = { paddingRight: 5 }
   const hoverStyle = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
 
   return (
@@ -178,7 +154,7 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <div>
-        <Notification notification={notification} />
+        <Notification />
         <ErrorBoundary>
           <Routes>
             <Route path="/" element={<BlogList blogs={blogs} />} />

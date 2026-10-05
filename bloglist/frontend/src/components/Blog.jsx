@@ -9,12 +9,10 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 
   return (
     <Paper elevation={2} sx={{ p: 4, mt: 3, borderRadius: 2 }}>
-      {/* Blogin otsikko */}
       <Typography variant="h4" component="h2" sx={{ fontWeight: 500, mb: 1 }}>
         {blog.title}
       </Typography>
 
-      {/* Kirjoittaja */}
       {blog.author && (
         <Typography
           variant="h6"
@@ -25,7 +23,6 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
         </Typography>
       )}
 
-      {/* Linkki */}
       <Box sx={{ mb: 1 }}>
         <a
           href={blog.url}
@@ -41,12 +38,10 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
         </a>
       </Box>
 
-      {/* Lisääjä */}
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
         Added by {blog.user?.name || blog.author || 'unknown'}
       </Typography>
 
-      {/* Tykkäykset ja napit samalla rivillä */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
           {blog.likes || 0} likes

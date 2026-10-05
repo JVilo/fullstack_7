@@ -1,23 +1,23 @@
-import { Alert } from '@mui/material'
+import { useNotificationValue } from '../NotificationContext'
 
-const Notification = ({ notification }) => {
+const Notification = () => {
+  const notification = useNotificationValue()
+
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 10,
+  }
+
   if (!notification) {
     return null
   }
 
-  const messageText =
-    notification.message || notification.text || notification.name
-
-  if (!messageText) {
-    return null
-  }
-
-  const severity = notification.type === 'error' ? 'error' : 'success'
-
   return (
-    <Alert severity={severity} style={{ marginTop: 10, marginBottom: 10 }}>
-      {messageText}
-    </Alert>
+    <div style={style} data-testid="notification">
+      {notification}
+    </div>
   )
 }
 
