@@ -4,6 +4,7 @@ import AnecdoteList from './components/AnecdoteList'
 import CreateNew from './components/CreateNew'
 import About from './components/About'
 import Footer from './components/Footer'
+import NotFound from './components/NotFound'
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/" element={<AnecdoteList />} />
           <Route path="/create" element={<CreateNew />} />
           <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </div>

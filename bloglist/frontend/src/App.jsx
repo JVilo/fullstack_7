@@ -5,6 +5,7 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './style.css'
@@ -68,6 +69,9 @@ const App = () => {
           <Button color="inherit" component={Link} to="/" sx={hoverStyle}>
             home
           </Button>
+          <Button color="inherit" component={Link} to="/users" sx={hoverStyle}>
+            users
+          </Button>
           {user ? (
             <span>
               <Button
@@ -99,6 +103,7 @@ const App = () => {
         <ErrorBoundary>
           <Routes>
             <Route path="/" element={<BlogList />} />
+            <Route path="/users" element={<Users />} />
 
             <Route
               path="/login"
