@@ -1,23 +1,40 @@
 import { useState } from 'react'
 import { TextField, Button } from '@mui/material'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import blogService from '../services/blogs'
+import { useNotify } from '../NotificationContext'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
 
-  const addBlog = (event) => {
-    event.preventDefault()
+  const queryClient = useQueryClient()
+  const notify = useNotify()
 
-    createBlog({
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: (newBlog) => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notify(`A new blog '${newBlog.title}' by ${newBlog.author} added`, 5)
+      setNewTitle('')
+      setNewAuthor('')
+      setNewUrl('')
+    },
+    onError: (exception) => {
+      const errorMessage =
+        exception.response?.data?.error || 'Creating blog failed'
+      notify(errorMessage, 5)
+    }
+  })
+
+  const addBlog = (e) => {
+    e.preventDefault()
+    newBlogMutation.mutate({
       title: newTitle,
       author: newAuthor,
       url: newUrl,
     })
-
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
   }
 
   return (
@@ -25,31 +42,25 @@ const BlogForm = ({ createBlog }) => {
       <h2>Create new blog</h2>
       <form onSubmit={addBlog}>
         <div>
-          <label>
-            <TextField
-              label="title"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-            />
-          </label>
+          <TextField
+            label="title"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
         </div>
         <div>
-          <label>
-            <TextField
-              label="author"
-              value={newAuthor}
-              onChange={(e) => setNewAuthor(e.target.value)}
-            />
-          </label>
+          <TextField
+            label="author"
+            value={newAuthor}
+            onChange={(e) => setNewAuthor(e.target.value)}
+          />
         </div>
         <div>
-          <label>
-            <TextField
-              label="url"
-              value={newUrl}
-              onChange={(e) => setNewUrl(e.target.value)}
-            />
-          </label>
+          <TextField
+            label="url"
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+          />
         </div>
         <Button type="submit" variant="contained" style={{ marginTop: 10 }}>
           create

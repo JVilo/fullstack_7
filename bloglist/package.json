@@ -17,5 +17,8 @@
   "devDependencies": {
     "concurrently": "^10.0.5",
     "prettier": "3.9.9"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.104.1"
   }
 }
