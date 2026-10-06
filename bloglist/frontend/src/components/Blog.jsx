@@ -3,11 +3,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
 import { useNotify } from '../NotificationContext'
+import { useUser } from '../UserContext'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const queryClient = useQueryClient()
   const notify = useNotify()
   const navigate = useNavigate()
+  const user = useUser()
 
   const updateBlogMutation = useMutation({
     mutationFn: (updatedBlog) => blogService.update(updatedBlog.id, updatedBlog),

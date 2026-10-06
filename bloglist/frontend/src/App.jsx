@@ -12,12 +12,15 @@ import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import NotFound from './components/NotFound.jsx'
 import { useNotify } from './NotificationContext'
+import { useUser, useUserDispatch } from './UserContext'
 import { useQuery } from '@tanstack/react-query'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const notify = useNotify()
+  const user = useUser()
+  const userDispatch = useUserDispatch()
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -28,28 +31,18 @@ const App = () => {
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((b) => b.id === match.params.id) : null
 
-  const [user, setUser] = useState(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const loggedUser = JSON.parse(loggedUserJSON)
-      blogService.setToken(loggedUser.token)
-      return loggedUser
-    }
-    return null
-  })
-
   const navigate = useNavigate()
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
+      const loggedUser = await loginService.login({ username, password })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedUser))
+      blogService.setToken(loggedUser.token)
+      userDispatch({ type: 'SET_USER', payload: loggedUser })
       setUsername('')
       setPassword('')
-      notify(`${user.name} logged in successfully`, 5)
+      notify(`${loggedUser.name} logged in successfully`, 5)
       navigate('/')
     } catch {
       setUsername('')
@@ -59,7 +52,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
+    userDispatch({ type: 'CLEAR_USER' })
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
     notify('Logged out successfully', 5)
@@ -130,7 +123,7 @@ const App = () => {
               path="/blogs/:id"
               element={
                 blog ? (
-                  <Blog blog={blog} user={user} />
+                  <Blog blog={blog} />
                 ) : (
                   <NotFound />
                 )
