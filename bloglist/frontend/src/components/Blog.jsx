@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Paper, Typography, Button, Box } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
@@ -6,6 +7,7 @@ import { useNotify } from '../NotificationContext'
 import { useUser } from '../UserContext'
 
 const Blog = ({ blog }) => {
+  const [commentText, setCommentText] = useState('')
   const queryClient = useQueryClient()
   const notify = useNotify()
   const navigate = useNavigate()
@@ -34,6 +36,18 @@ const Blog = ({ blog }) => {
     },
   })
 
+  const addCommentMutation = useMutation({
+    mutationFn: ({ id, comment }) => blogService.comment(id, comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notify(`Comment added to '${blog.title}'`, 5)
+      setCommentText('')
+    },
+    onError: () => {
+      notify('Adding comment failed', 5)
+    },
+  })
+
   if (!blog) {
     return null
   }
@@ -53,6 +67,12 @@ const Blog = ({ blog }) => {
     if (window.confirm(`Delete ${blog.title}?`)) {
       deleteBlogMutation.mutate(blog.id)
     }
+  }
+
+  const handleCommentSubmit = (event) => {
+    event.preventDefault()
+    if (!commentText.trim()) return
+    addCommentMutation.mutate({ id: blog.id, comment: commentText })
   }
 
   return (
@@ -116,6 +136,33 @@ const Blog = ({ blog }) => {
             REMOVE
           </Button>
         )}
+      </Box>
+
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          Comments
+        </Typography>
+
+        {blog.comments && blog.comments.length > 0 ? (
+          <ul>
+            {blog.comments.map((comment, index) => (
+              <li key={index}>{comment}</li>
+            ))}
+          </ul>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            No comments yet.
+          </Typography>
+        )}
+        <form onSubmit={handleCommentSubmit} style={{ marginBottom: '16px' }}>
+          <input
+            value={commentText}
+            onChange={({ target }) => setCommentText(target.value)}
+            placeholder="comment..."
+            style={{ marginRight: '8px', padding: '6px' }}
+          />
+          <button type="submit">add comment</button>
+        </form>
       </Box>
     </Paper>
   )
