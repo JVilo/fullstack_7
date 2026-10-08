@@ -161,7 +161,14 @@ const Blog = ({ blog }) => {
             placeholder="comment..."
             style={{ marginRight: '8px', padding: '6px' }}
           />
-          <button type="submit">add comment</button>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleCommentSubmit}
+            sx={{ bgcolor: 'primary.dark' }}
+          >
+            add comment
+          </Button>
         </form>
       </Box>
     </Paper>
