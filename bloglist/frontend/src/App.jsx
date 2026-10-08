@@ -6,7 +6,9 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Users from './components/Users'
+import User from './components/User.jsx'
 import blogService from './services/blogs'
+import usersService from './services/users'
 import loginService from './services/login'
 import './style.css'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
@@ -23,14 +25,26 @@ const App = () => {
   const user = useUser()
   const userDispatch = useUserDispatch()
 
-  const result = useQuery({
+  const blogsResult = useQuery({
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
   })
 
-  const blogs = result.data || []
-  const match = useMatch('/blogs/:id')
-  const blog = match ? blogs.find((b) => b.id === match.params.id) : null
+  const usersResult = useQuery({
+    queryKey: ['users'],
+    queryFn: usersService.getAll,
+  })
+
+  const blogs = blogsResult.data || []
+  const users = usersResult.data || []
+
+  const blogMatch = useMatch('/blogs/:id')
+  const blog = blogMatch ? blogs.find((b) => b.id === blogMatch.params.id) : null
+
+  const userMatch = useMatch('/users/:id')
+  const selectedUser = userMatch
+    ? users.find((u) => u.id === userMatch.params.id)
+    : null
 
   const navigate = useNavigate()
 
@@ -65,6 +79,7 @@ const App = () => {
   return (
     <Container>
       <AppBar position="static">
+        <h1 style={{ margin: '0 16px', fontSize: '1.5rem' }}>Blog App</h1>
         <Toolbar>
           <Button color="inherit" component={Link} to="/" sx={hoverStyle}>
             home
@@ -104,6 +119,16 @@ const App = () => {
           <Routes>
             <Route path="/" element={<BlogList />} />
             <Route path="/users" element={<Users />} />
+            <Route
+              path="/users/:id"
+              element={
+                selectedUser ? (
+                  <User user={selectedUser} />
+                ) : (
+                  <NotFound />
+                )
+              }
+            />
 
             <Route
               path="/login"
