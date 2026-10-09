@@ -11,7 +11,7 @@ import blogService from './services/blogs'
 import usersService from './services/users'
 import loginService from './services/login'
 import './style.css'
-import { Container, AppBar, Toolbar, Button } from '@mui/material'
+import { Container, AppBar, Toolbar, Button, Typography, Box } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import NotFound from './components/NotFound.jsx'
 import { useNotify } from './NotificationContext'
@@ -74,33 +74,62 @@ const App = () => {
     navigate('/')
   }
 
-  const hoverStyle = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
+  const hoverStyle = { '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' } }
 
   return (
-    <Container>
-      <AppBar position="static">
-        <h1 style={{ margin: '0 16px', fontSize: '1.5rem' }}>Blog App</h1>
+    <Container maxWidth="md" sx={{ pb: 5 }}>
+      <AppBar position="static" sx={{ borderRadius: 1, mt: 2 }}>
         <Toolbar>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            sx={{
+              flexGrow: 1,
+              color: 'inherit',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+            }}
+          >
+            Blog App
+          </Typography>
+
           <Button color="inherit" component={Link} to="/" sx={hoverStyle}>
-            home
+            blogs
           </Button>
           <Button color="inherit" component={Link} to="/users" sx={hoverStyle}>
             users
           </Button>
+
           {user ? (
-            <span>
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
               <Button
                 color="inherit"
                 component={Link}
                 to="/create"
                 sx={hoverStyle}
               >
-                create new
+                new blog
               </Button>
-              <Button color="inherit" onClick={handleLogout} sx={hoverStyle}>
+              <Typography variant="body2" sx={{ mx: 1.5, opacity: 0.9 }}>
+                <em>{user.name} logged in</em>
+              </Typography>
+              <Button
+                color="inherit"
+                variant="outlined"
+                size="small"
+                onClick={handleLogout}
+                sx={{
+                  borderColor: 'rgba(255,255,255,0.5)',
+                  '&:hover': {
+                    borderColor: '#fff',
+                    bgcolor: 'rgba(255,255,255,0.1)',
+                  },
+                }}
+              >
                 logout
               </Button>
-            </span>
+            </Box>
           ) : (
             <Button
               color="inherit"
@@ -113,7 +142,8 @@ const App = () => {
           )}
         </Toolbar>
       </AppBar>
-      <div>
+
+      <Box sx={{ mt: 3 }}>
         <Notification />
         <ErrorBoundary>
           <Routes>
@@ -162,7 +192,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>
-      </div>
+      </Box>
     </Container>
   )
 }

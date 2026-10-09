@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Paper, Typography, Button, Box } from '@mui/material'
+import {
+  Paper,
+  Typography,
+  Button,
+  Box,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
@@ -82,11 +92,7 @@ const Blog = ({ blog }) => {
       </Typography>
 
       {blog.author && (
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          sx={{ mb: 2, fontWeight: 400 }}
-        >
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 2, fontWeight: 400 }}>
           by {blog.author}
         </Typography>
       )}
@@ -96,11 +102,7 @@ const Blog = ({ blog }) => {
           href={blog.url}
           target="_blank"
           rel="noreferrer"
-          style={{
-            color: '#1976d2',
-            fontSize: '1.1rem',
-            textDecoration: 'underline',
-          }}
+          style={{ color: '#1976d2', fontSize: '1.1rem', textDecoration: 'underline' }}
         >
           {blog.url}
         </a>
@@ -116,60 +118,58 @@ const Blog = ({ blog }) => {
         </Typography>
 
         {user && (
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={handleLike}
-          >
+          <Button variant="outlined" color="primary" size="small" onClick={handleLike}>
             LIKE
           </Button>
         )}
 
         {isOwner && (
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={handleDelete}
-          >
+          <Button variant="outlined" color="error" size="small" onClick={handleDelete}>
             REMOVE
           </Button>
         )}
       </Box>
 
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="h6" sx={{ mb: 1 }}>
-          Comments
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          comments
         </Typography>
 
+        <Box
+          component="form"
+          onSubmit={handleCommentSubmit}
+          sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}
+        >
+          <TextField
+            size="small"
+            label="add a comment..."
+            value={commentText}
+            onChange={({ target }) => setCommentText(target.value)}
+            sx={{ flexGrow: 1 }}
+          />
+          <Button type="submit" variant="contained" sx={{ bgcolor: 'primary.dark' }}>
+            add comment
+          </Button>
+        </Box>
+
         {blog.comments && blog.comments.length > 0 ? (
-          <ul>
-            {blog.comments.map((comment, index) => (
-              <li key={index}>{comment}</li>
-            ))}
-          </ul>
+          <Paper variant="outlined">
+            <List disablePadding>
+              {blog.comments.map((comment, index) => (
+                <div key={index}>
+                  {index > 0 && <Divider />}
+                  <ListItem>
+                    <ListItemText primary={comment} />
+                  </ListItem>
+                </div>
+              ))}
+            </List>
+          </Paper>
         ) : (
           <Typography variant="body2" color="text.secondary">
             No comments yet.
           </Typography>
         )}
-        <form onSubmit={handleCommentSubmit} style={{ marginBottom: '16px' }}>
-          <input
-            value={commentText}
-            onChange={({ target }) => setCommentText(target.value)}
-            placeholder="comment..."
-            style={{ marginRight: '8px', padding: '6px' }}
-          />
-          <Button
-            variant="contained"
-            size="small"
-            onClick={handleCommentSubmit}
-            sx={{ bgcolor: 'primary.dark' }}
-          >
-            add comment
-          </Button>
-        </form>
       </Box>
     </Paper>
   )
