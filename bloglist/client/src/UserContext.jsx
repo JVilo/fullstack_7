@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer } from 'react'
 import blogService from './services/blogs'
+import persistentUser from './services/persistentUser'
 
 const UserContext = createContext()
 
@@ -16,9 +17,8 @@ const userReducer = (state, action) => {
 
 export const UserProvider = ({ children }) => {
   const [user, userDispatch] = useReducer(userReducer, null, () => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
+    const user = persistentUser.getUser()
+    if (user) {
       blogService.setToken(user.token)
       return user
     }

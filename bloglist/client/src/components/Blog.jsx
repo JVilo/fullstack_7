@@ -17,6 +17,11 @@ import { useNotify } from '../NotificationContext'
 import { useUser } from '../UserContext'
 
 const Blog = ({ blog }) => {
+  if (!blog) {
+    throw new Error('Blog not found')
+  }
+  const addedBy = blog.user.name
+
   const [commentText, setCommentText] = useState('')
   const queryClient = useQueryClient()
   const notify = useNotify()
@@ -58,17 +63,13 @@ const Blog = ({ blog }) => {
     },
   })
 
-  if (!blog) {
-    return null
-  }
-
-  const isOwner = user && (blog.user?.username === user.username || !blog.user)
+  const isOwner = user && blog.user && (blog.user.username === user.username)
 
   const handleLike = () => {
     const updatedBlog = {
       ...blog,
       likes: (blog.likes || 0) + 1,
-      user: blog.user?.id || blog.user,
+      user: blog.user.id || blog.user,
     }
     updateBlogMutation.mutate(updatedBlog)
   }
@@ -109,7 +110,7 @@ const Blog = ({ blog }) => {
       </Box>
 
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        Added by {blog.user?.name || blog.author || 'unknown'}
+        Added by {addedBy}
       </Typography>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

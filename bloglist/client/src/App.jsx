@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
@@ -10,6 +10,7 @@ import User from './components/User.jsx'
 import blogService from './services/blogs'
 import usersService from './services/users'
 import loginService from './services/login'
+import persistentUser from './services/persistentUser'
 import './style.css'
 import { Container, AppBar, Toolbar, Button, Typography, Box } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -24,6 +25,14 @@ const App = () => {
   const notify = useNotify()
   const user = useUser()
   const userDispatch = useUserDispatch()
+
+  useEffect(() => {
+    const loggedUser = persistentUser.getUser()
+    if (loggedUser) {
+      userDispatch({ type: 'SET_USER', payload: loggedUser })
+      blogService.setToken(loggedUser.token)
+    }
+  }, [userDispatch])
 
   const blogsResult = useQuery({
     queryKey: ['blogs'],
@@ -52,7 +61,7 @@ const App = () => {
     event.preventDefault()
     try {
       const loggedUser = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedUser))
+      persistentUser.saveUser(loggedUser)
       blogService.setToken(loggedUser.token)
       userDispatch({ type: 'SET_USER', payload: loggedUser })
       setUsername('')
@@ -69,7 +78,7 @@ const App = () => {
   const handleLogout = () => {
     userDispatch({ type: 'CLEAR_USER' })
     blogService.setToken(null)
-    window.localStorage.removeItem('loggedBlogappUser')
+    persistentUser.removeUser()
     notify('Logged out successfully', 5)
     navigate('/')
   }
@@ -182,10 +191,10 @@ const App = () => {
             <Route
               path="/blogs/:id"
               element={
-                blog ? (
-                  <Blog blog={blog} />
+                blogsResult.isLoading && !blog ? (
+                  <div>loading...</div>
                 ) : (
-                  <NotFound />
+                  <Blog blog={blog} />
                 )
               }
             />
