@@ -16,11 +16,11 @@ export default defineConfig({
     {
       command: 'npm run server:test',
       cwd: '../routed-anecdotes',
-      url: 'http://localhost:3002/anecdotes',
+      url: 'http://localhost:3001/anecdotes',
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: 'npm run start:test',
+      command: 'npm run dev',
       cwd: '../routed-anecdotes',
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
