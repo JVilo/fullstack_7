@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
-    "build": "npm run build --prefix frontend",
-    "start": "NODE_ENV=production npm start --prefix backend",
+    "build": "npm run build --prefix client",
+    "start": "NODE_ENV=production npm start --prefix server",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
