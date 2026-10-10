@@ -39,6 +39,7 @@ jobs:
         working-directory: bloglist-tests
         env:
           TEST_MONGODB_URI: mongodb://localhost:27017/bloglistTest
+          SECRET: salainen_avain_tokenin_allekirjoitukseen
         run: npx playwright test
 
       - name: Upload Playwright report
