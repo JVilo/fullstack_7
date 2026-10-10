@@ -15,14 +15,14 @@ export default defineConfig({
   webServer: [
     {
       command: 'npm run server:test',
-      cwd: '../routed-anecdotes',
-      url: 'http://localhost:3001/anecdotes',
+      cwd: '../bloglist/server',
+      url: 'http://localhost:3001/api/blogs',
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
     },
     {
       command: 'npm run dev',
-      cwd: '../routed-anecdotes',
+      cwd: '../bloglist/client',
       url: 'http://localhost:5173',
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
