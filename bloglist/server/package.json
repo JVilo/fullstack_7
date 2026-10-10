@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development node --watch index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "lint": "eslint .",
-    "start:test": "cross-env NODE_ENV=test node index.js"
+    "start:test": "cross-env NODE_ENV=test PORT=3001 node index.js"
   },
   "author": "Johanna",
   "license": "MIT",
