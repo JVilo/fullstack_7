@@ -1,3 +1,5 @@
+console.log('[DEBUG] app.js: script started')
+
 const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
@@ -8,16 +10,20 @@ const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 
+console.log('[DEBUG] app.js: all requires completed')
+
 const app = express()
 
-logger.info('connecting to', config.MONGODB_URI)
+console.log('[DEBUG] app.js: connecting to MongoDB URI:', config.MONGODB_URI)
 
 mongoose
   .connect(config.MONGODB_URI, { family: 4 })
   .then(() => {
+    console.log('[DEBUG] app.js: mongoose.connect resolved successfully')
     logger.info('connected to MongoDB')
   })
   .catch((error) => {
+    console.error('[DEBUG] app.js: mongoose.connect rejected with error:', error.message)
     logger.error('error connection to MongoDB:', error.message)
   })
 
@@ -31,6 +37,7 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
 if (process.env.NODE_ENV === 'test') {
+  console.log('[DEBUG] app.js: loading testing router')
   const testingRouter = require('./controllers/testing')
   app.use('/api/testing', testingRouter)
 }
@@ -44,5 +51,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
+
+console.log('[DEBUG] app.js: module export ready')
 
 module.exports = app
