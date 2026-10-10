@@ -14,7 +14,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'npm run start:test',
+      command: 'npm run server:test',
       cwd: '../routed-anecdotes',
       url: 'http://localhost:3001/anecdotes',
       reuseExistingServer: !process.env.CI,
