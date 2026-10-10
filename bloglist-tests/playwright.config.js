@@ -18,8 +18,6 @@ export default defineConfig({
       cwd: '../bloglist/server',
       url: 'http://localhost:3001/api/blogs',
       timeout: 120 * 1000,
-      stdout: 'pipe',
-      stderr: 'pipe',
       reuseExistingServer: !process.env.CI,
     },
     {
@@ -27,8 +25,6 @@ export default defineConfig({
       cwd: '../bloglist/client',
       url: 'http://localhost:5173',
       timeout: 120 * 1000,
-      stdout: 'pipe',
-      stderr: 'pipe',
       reuseExistingServer: !process.env.CI,
     },
   ],
