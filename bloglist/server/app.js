@@ -28,6 +28,13 @@ mongoose
   })
 
 app.use(express.json())
+
+if (process.env.NODE_ENV === 'test') {
+  console.log('[DEBUG] app.js: loading testing router')
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
+
 app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 app.use(middleware.userExtractor)
@@ -35,12 +42,6 @@ app.use(middleware.userExtractor)
 app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
-
-if (process.env.NODE_ENV === 'test') {
-  console.log('[DEBUG] app.js: loading testing router')
-  const testingRouter = require('./controllers/testing')
-  app.use('/api/testing', testingRouter)
-}
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/dist')))
